@@ -1,0 +1,494 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100%;
+    margin-bottom: 100px;
+}
+
+body, input, button {
+    font-family: 'Open Sans', sans-serif;
+}
+
+input, button {
+    font-size: 16px;
+}
+
+main#blur.active{
+    filter: blur(20px);
+    pointer-events: none;
+    user-select: none;
+}
+/* custom dialog */
+.dialog {
+    display: none;
+    /* transform: translate(-50%, -50%); */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    position: fixed;
+    max-width: 400px;
+    width: 100%;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.dialog-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 900;
+}
+
+.dialog button{
+    background: #111;
+    color: #fff;
+    padding: 5px 20px;
+    position: relative;
+    margin-top: 20px;
+    margin-left: 250px;
+}
+
+/* Bagian Head Bar */
+.head_bar {
+    padding: 12px;
+    display: flex;
+    /* align-items:start; */
+    /* justify-content: center; */
+    background-color: #d65db1;
+    color: white;
+}
+
+/* End Bagian Head Bar */
+/* Bagian Main Konten */
+main {
+    /* max-width: 800px; */
+    /* width: 80%; */
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    gap: 1.5rem;
+    flex-flow: row;
+    align-items: flex-start;
+    justify-content: space-around;
+    background-color: d6ffde;
+
+}
+/* End Bagian Main Konten */
+
+/* Bagian Form Input Buku */
+.input_section {
+    display: block;
+    flex-direction: column nowrap;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #ff6f91;
+    height: auto;
+    width: 50%;
+    box-shadow: 0 5px 10px #ff6f91;
+}
+
+.input_section > form > .input {
+    margin: 8px 0;
+}
+
+.input_section > .header {
+    display: flex;
+    margin-bottom: 16px;
+    align-items: start;
+}
+
+.input_section > .header > button {
+    background-color: #176B87;
+    border: 0;
+    border-radius: 20px;
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+    color: white;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.input_section > .header > button:hover {
+    background-color: #053B50;
+}
+
+.input_section > .header > h2 {
+    text-align: center;
+    color: white;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+.input_section > form > button {
+    background-color: #64CCC5;
+    color: #176B87;
+    border: 0;
+    border-radius: 20px;
+    font-weight: 600;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+.input_section > form > button > span {
+    font-weight: bold;
+}
+
+.input_section > form > .input > input {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    border-radius: 20px;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    border: 1px solid rgb(148, 148, 148);
+}
+
+.input_section > form > .input > input:focus{
+    outline: none !important;
+    border: 2px solid #64CCC5;
+}
+
+.input_section > form > .input > label {
+    color: white;
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+}
+
+.input_section > form > .input_inline {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+}
+
+.input_section > form > .input_inline > label {
+    color: white;
+    font-weight: bold;
+    margin-left: 16px;
+    font-size: 0.8rem;
+}
+
+.input_section > form > .input_inline > input {
+    scale: 1.4;
+}
+
+.input_section > form > button:hover{
+    background-color: #053B50;
+    color: white;
+}
+/* End Bagian Form Input Buku */
+
+main#blur.active{
+    filter: blur(20px);
+}
+/* bagian edit buku */
+.edit_section {
+    display: none;
+    flex-direction: column nowrap;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #ff6f91;
+    height: auto;
+    width: 50%;
+    box-shadow: 0 5px 10px #ff6f91;
+}
+
+.edit_section > form > .input {
+    margin: 8px 0;
+}
+
+.edit_section > .header {
+    display: flex;
+    margin-bottom: 16px;
+    align-items: start;
+}
+
+.edit_section > .header > button {
+    background-color: #176B87;
+    border: 0;
+    border-radius: 20px;
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+    color: white;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.edit_section > .header > button:hover {
+    background-color: #053B50;
+}
+
+.edit_section > .header > h2 {
+    text-align: center;
+    color: white;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+.edit_section > form > button {
+    background-color: #64CCC5;
+    color: #176B87;
+    border: 0;
+    border-radius: 20px;
+    font-weight: 600;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+.edit_section > form > button > span {
+    font-weight: bold;
+}
+
+.edit_section > form > .input > input {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    border-radius: 20px;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    border: 1px solid rgb(148, 148, 148);
+}
+
+.edit_section > form > .input > input:focus{
+    outline: none !important;
+    border: 2px solid #64CCC5;
+}
+
+.edit_section > form > .input > label {
+    color: white;
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+}
+
+.edit_section > form > .input_inline {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+}
+
+.edit_section > form > .input_inline > label {
+    color: white;
+    font-weight: bold;
+    margin-left: 16px;
+    font-size: 0.8rem;
+}
+
+.edit_section > form > .input_inline > input {
+    scale: 1.4;
+}
+
+.edit_section > form > button:hover{
+    background-color: #053B50;
+    color: white;
+}
+/* end of edit buku */
+/* Bagian Form Cari Buku */
+.search_section {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    width: 50%;
+    border-radius: 10px;
+    background-color: #ff6f91;
+    box-shadow: 0 5px 10px #ff6f91;
+}
+
+.search_section > h2 {
+    color: white;
+    font-size: 1.3rem;
+    margin-left: 16px;
+    margin-bottom: 8px;
+}
+
+.search_section > form {
+    padding: 16px;
+    width: 100%;
+    display: flex;
+    grid-template-columns: 0.7fr 0.2fr 0.3fr;
+    grid-gap: 10px;
+}
+
+.search_section > form > label {
+    display: flex;
+    align-items: center;
+}
+
+.search_section > form > input {
+    padding: 8px 20px 8px 20px;
+    border-radius: 20px;
+    width: 75%;
+    font-size: 0.8rem;
+    border: 1px solid rgb(148, 148, 148);
+}
+
+.search_section > form > input:focus{
+    outline: none !important;
+    border: 2px solid #64CCC5;
+}
+
+.search_section > form > button {
+    background-color: #64CCC5;
+    width: 25%;
+    color: #176B87;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border: 0;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.search_section > form > button:hover{
+    background-color: #053B50;
+    color: white;
+}
+/* End Bagian Form Cari Buku */
+/* Bagian Daftar Buku */
+.book_shelf {
+    display: block;
+    margin: 16px 0 0 0;
+    border: 1px solid #e9e9e9;
+    padding: 16px;
+    background-color: #f0f0f0;
+    box-shadow: 0 5px 10px #d0d0d0;
+    border-radius: 10px;
+}
+
+.book_shelf > h2 {
+    color: #176B87;
+    font-size: 1.2rem;
+}
+
+.book_shelf > .book_list {
+    padding: 16px;
+}
+
+.book_shelf > .book_list > .book_item {
+    padding: 8px 16px 16px 16px;
+    background-color: white;
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+.book_shelf > .book_list > .book_item > h3, p {
+    margin: 8px 0;
+    color: #176B87;
+}
+
+.book_shelf > .book_list > .book_item > p {
+    font-size: 0.8rem;
+    font-weight: normal;
+    margin-top: 0px;
+    margin-bottom: 4px
+}
+
+.book_shelf > .book_list > .book_item > .action {
+    border-top: 1px solid #d0d0d0;
+    margin-top: 16px;
+}
+
+.book_shelf > .book_list > .book_item > .action > button {
+    border: 0;
+    padding: 5px 10px;
+    margin: 16px 5px 0 0;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.book_shelf > .book_list > .empty-state {
+    background-color: white;
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+}
+
+.book_shelf > .book_list > .empty-state > p {
+    color: gray;
+    font-size: 0.9rem;
+}
+
+.book_shelf > .book_list > .empty-state > p > span {
+    font-weight: bold;
+}
+
+.book_shelf > .book_list > .book_item:hover {
+    border: 0.5px solid #176b8738;
+    box-shadow: 0px 5px 10px #176b8738;
+    color: white;
+}
+
+.book_shelf > .book_list > .book_item > .action > .primary {
+    background-color: #176B87;
+    color: white;
+}
+
+.book_shelf > .book_list > .book_item > .action > .primary:hover{
+    background-color: #053B50;
+    color: white;
+}
+
+.book_shelf > .book_list > .book_item > .action > .info:hover{
+    background-color: #053B50;
+    color: white;
+}
+
+.book_shelf > .book_list > .book_item > .action > .secondary:hover{
+    background-color: #A73121;
+    color: white;
+}
+/* End Bagian Daftar Buku */
+/* Bagian Footer */
+footer {
+    position: fixed;
+    margin-top: 16px;
+    width: 100%;
+    background-color: #d65db1;
+    padding: 20px;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+    bottom: 0;
+}
+/* End Bagian Footer */
+
+@media screen and (max-width: 768px) {
+    main{
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .input_section{
+        width: 100%;
+    }
+    .search_section{
+        width: 100%;
+    }
+}
