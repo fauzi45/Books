@@ -5,13 +5,6 @@ let listBooks = []
 
 // load page
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('inputBook')
-    const buttonSubmit = document.getElementById('bookSubmit')
-    const back = document.getElementById('back')
-
-    const {containerInput, containerSearch, containerBookShelfComplete, conatinerBookShelfInComplete} = getElementContainer()
-
-    const {isComplete} = getElementInputForm()
 
     // render UI Element
     document.addEventListener(RENDER_EVENT, () => {
@@ -43,12 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
             bookshelfInCompletedRead.append(generateElementEmptyState(false))
         }
     })
-
+    const simpanData = document.getElementById("bookSubmit");
     // event submit form
-    form.addEventListener('submit', (event) => {
+    simpanData.addEventListener('click', (event) => {
         event.preventDefault()
-        
-        saveData()
+        saveSuccess()
+        saveData()        
     })
 
     // init value local storage
@@ -138,20 +131,8 @@ function generateElementBooks(bookObject) {
     btnDelete.classList.add('secondary')
     // action btn edit
     btnEdit.addEventListener('click', () => {
-        const {containerInput, containerSearch, containerBookShelfComplete, conatinerBookShelfInComplete, containerEdit} = getElementContainer()
+        updateData(bookObject.id);
 
-        containerEdit.style.display = 'flex'
-        containerSearch.style.display = 'none'
-        containerBookShelfComplete.style.display = 'none'
-        conatinerBookShelfInComplete.style.display = 'none'
-
-        const {title, author, year, isComplete, inputBookId} = getElementInputForm()
-
-        inputBookId.value = bookObject.id
-        title.value = bookObject.title
-        author.value = bookObject.author
-        year.value = bookObject.year
-        isComplete.checked = bookObject.isComplete
     })
     // action btn edit status
     btnEditStatus.addEventListener('click', () => {
@@ -178,7 +159,25 @@ function generateElementBooks(bookObject) {
 
     return article
 }
+function editData(){
+    const {title, author, year, isComplete, inputBookId} = getElementInputForm()
+    const data = {
+        title: title.value,
+        author: author.value,
+        year: year.value,
+        isComplete: isComplete.checked,
+    }
 
+    if (inputBookId.value) {
+        // find book by id
+        const findIndexBook = findBookIndex(inputBookId.value)
+        data.id = inputBookId.value
+        listBooks.splice(findIndexBook, 1, data)
+    } 
+    saveDataToLocalStorage()
+    resetForm()
+    document.dispatchEvent(new Event(RENDER_EVENT))
+}
 // save data book
 function saveData() {
     const {title, author, year, isComplete, inputBookId} = getElementInputForm()
@@ -199,7 +198,6 @@ function saveData() {
         data.id = generatedId
         listBooks.push(data)
     }
-    showDialog();
 
     saveDataToLocalStorage()
     resetForm()
@@ -275,12 +273,44 @@ function deleteData(id) {
         listBooks.splice(findIndexBook, 1)
         const keyword = document.getElementById('searchBookTitle')
         keyword.value = ''
+        deleteSuccess()
         saveDataToLocalStorage()
         document.dispatchEvent(new Event(RENDER_EVENT))
     }
 }
 
 
+function updateData(id){
+    const detailBook = findBook(id)
+    const updated = document.getElementById("update");
+    const book = document.getElementById("bookSubmit");
+    const edited = document.getElementById("editbuku");
+    const inputed = document.getElementById("inputbuku");
+    
+    inputed.style.display = "none";
+    book.style.display = "none";
+    updated.style.display = "block";
+    edited.style.display = "block";
+
+        const {title, author, year, isComplete, inputBookId} = getElementInputForm()
+        
+        inputBookId.value = detailBook.id
+        title.value = detailBook.title
+        author.value = detailBook.author
+        year.value = detailBook.year
+        isComplete.checked = detailBook.isComplete
+        
+        updated.addEventListener("click", (event) => {
+            event.preventDefault()
+            updateSuccess()
+            editData()
+            inputed.style.display = "block";
+            book.style.display = "block";
+            updated.style.display = "none";
+            edited.style.display = "none";
+        })
+        
+}
 const keyword = document.getElementById('searchBookTitle')
 const searchBook = document.getElementById('searchSubmit')
 searchBook.addEventListener('click', (event) => {
@@ -351,3 +381,51 @@ function toggle(){
     var customDialog = document.getElementById('dialog')
     customDialog.classList.toggle('active');
 }
+
+function deleteSuccess() {
+
+    swal({
+
+         title: "Berhasil!",
+
+         text: "Data berhasil dihapus",
+
+         icon: "success",
+
+         button: true
+
+     });
+
+ }
+
+ function updateSuccess() {
+
+    swal({
+
+         title: "Berhasil!",
+
+         text: "Data berhasil di Update",
+
+         icon: "success",
+
+         button: true
+
+     });
+
+ }
+
+ function saveSuccess() {
+
+    swal({
+
+         title: "Berhasil!",
+
+         text: "Data berhasil di simpan",
+
+         icon: "success",
+
+         button: true
+
+     });
+
+ }

@@ -20,7 +20,8 @@
     <main>
       <section id="input_section" class="input_section">
         <div class="header">
-          <h2>Masukkan Buku Baru</h2>
+          <h2 id="inputbuku">Masukkan Buku Baru</h2>
+          <h2 id="editbuku">Form Edit Buku</h2>
         </div>
         <form id="inputBook">
           <input type="hidden" id="inputBookId" />
@@ -30,47 +31,21 @@
           </div>
           <div class="input">
             <label for="inputBookAuthor">Penulis</label>
-            <input id="inputBookAuthor" placeholder="Masukan penulis buku" type="text" required>
+            <input id="inputBookAuthor" placeholder="Masukan penulis buku" type="text" maxlength="15" required>
           </div>
           <div class="input">
             <label for="inputBookYear">Tahun</label>
-            <input id="inputBookYear" placeholder="Masukan tahun diterbitkan" type="number" required>
+            <input id="inputBookYear" placeholder="Masukan tahun diterbitkan" type="number" pattern="\d*" maxlength="4" required >
           </div>
           <div class="input_inline">
             <input id="inputBookIsComplete" type="checkbox">
             <label for="inputBookIsComplete">Selesai dibaca</label>
           </div>
           <button id="bookSubmit" type="submit">Tambah</button>
+          <button id="update">Update</button>
         </form>
       </section>
       <!-- end of input section -->
-      <!-- start of edit section -->
-      <section id="edit_section" class="edit_section">
-        <div class="header">
-          <h2>Masukkan Buku Baru</h2>
-        </div>
-        <form id="inputBook">
-          <input type="hidden" id="inputBookId" />
-          <div class="input">
-            <label for="inputBookTitle">Judul</label>
-            <input id="inputBookTitle" placeholder="Masukan judul buku" type="text" required>
-          </div>
-          <div class="input">
-            <label for="inputBookAuthor">Penulis</label>
-            <input id="inputBookAuthor" placeholder="Masukan penulis buku" type="text" required>
-          </div>
-          <div class="input">
-            <label for="inputBookYear">Tahun</label>
-            <input id="inputBookYear" placeholder="Masukan tahun diterbitkan" type="number" required>
-          </div>
-          <div class="input_inline">
-            <input id="inputBookIsComplete" type="checkbox">
-            <label for="inputBookIsComplete">Selesai dibaca</label>
-          </div>
-          <button id="bookSubmit" type="submit">Edit</button>
-        </form>
-      </section>
-      <!-- end of edit section -->
       <!-- start of search section -->
       <section id="search_section" class="search_section">
         <h2>Cari Buku</h2>
@@ -101,6 +76,7 @@
     </main>
     
     <footer>Copyright &copy; 2023 | Fauzi all right served.</footer>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="js/script.js"></script>
   </body>
 </html>
