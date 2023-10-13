@@ -1,12 +1,33 @@
 const RENDER_EVENT = 'render-ui'
 const STORAGE_KEY = 'bookshelf-apps'
-
+// membuat array books
 let listBooks = []
 
-// load page
+// load content
 document.addEventListener('DOMContentLoaded', () => {
+    // membuat notifikasi input karakter maks
+    document.getElementById('inputBookYear').addEventListener('input', function () {
+      const jumlahKarakterDiketik = document.getElementById('inputBookYear').value.length;
+      const jumlahKarakterMaksimal = document.getElementById('inputBookYear').maxLength;
+      const sisaKarakterUpdate = jumlahKarakterMaksimal - jumlahKarakterDiketik;
+      if (sisaKarakterUpdate === 0) {
+        document.getElementById('sisaKarakter').innerText = 'Batas input tahun tercapai!';
+      } else if (sisaKarakterUpdate <= 5) {
+        document.getElementById('notifikasiSisaKarakter').style.color = 'red';
+      } else {
+        document.getElementById('notifikasiSisaKarakter').style.color = 'black';
+      }
+    });
+    
+    document.getElementById('inputBookYear').addEventListener('focus', function () {
+      document.getElementById('notifikasiSisaKarakter').style.visibility = 'visible';
+    });
 
-    // render UI Element
+    document.getElementById('inputBookYear').addEventListener('blur', function () {
+      document.getElementById('notifikasiSisaKarakter').style.visibility = 'hidden';
+    });
+    
+    // merender tampilan UI
     document.addEventListener(RENDER_EVENT, () => {
         const bookshelfCompletedRead = document.getElementById('completeBookshelfList')
         const bookshelfInCompletedRead = document.getElementById('incompleteBookshelfList')
@@ -29,29 +50,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // set empty state to bookshelf
+        // jika buku kosong maka
         if (totalBookCompleted == 0) {
             bookshelfCompletedRead.append(generateElementEmptyState(true))
         } if (totalBookInCompleted == 0) {
             bookshelfInCompletedRead.append(generateElementEmptyState(false))
         }
-    })
+    });
+
+    //function untuk simpan data
     const simpanData = document.getElementById("bookSubmit");
-    // event submit form
     simpanData.addEventListener('click', (event) => {
         event.preventDefault()
         saveSuccess()
         saveData()        
     })
 
-    // init value local storage
+    // cek kondisi value local storage
     if (localStorage.getItem(STORAGE_KEY) === null)
         saveDataToLocalStorage()
     // load data from local storage
     loadDataFromLocalStorage()
 })
 
-// check if web is support local storage
+// cek jika local storage support web
 function checkStorageIsExists() {
     if (typeof (Storage) === undefined) {
         alert('Browser kamu tidak mendukung local storage');
@@ -60,12 +82,12 @@ function checkStorageIsExists() {
     return true;
 }
 
-// generte id book with timestamp
+// membuat id dengan tipe data timestamp
 function generateId() {
     return +new Date()
 }
 
-// get element container (input section, search section, bookshelf list)
+// mendapatkan element container
 function getElementContainer() {
     const containerInput = document.getElementById('input_section')
     const containerSearch = document.getElementById('search_section')
@@ -77,7 +99,7 @@ function getElementContainer() {
 
 
 
-// get element form input
+// mendapat element dari input form
 function getElementInputForm() {
     const title = document.getElementById('inputBookTitle')
     const author = document.getElementById('inputBookAuthor')
@@ -88,7 +110,7 @@ function getElementInputForm() {
     return {title, author, year, isComplete, inputBookId}
 }
 
-// generate element empty state
+// membuat element jika element kosong
 function generateElementEmptyState(isComplete) {
     const container = document.createElement('div')
     const message = document.createElement('p')
@@ -104,9 +126,8 @@ function generateElementEmptyState(isComplete) {
     return container
 }
 
-// generate element list book
+// membuat element list book
 function generateElementBooks(bookObject) {
-    // get all element needed
     const article = document.createElement('article')
     const title = document.createElement('h3')
     const author = document.createElement('p')
@@ -129,36 +150,38 @@ function generateElementBooks(bookObject) {
     btnEditStatus.classList.add('primary')
     btnEdit.classList.add('info')
     btnDelete.classList.add('secondary')
-    // action btn edit
+    // action untuk tombol edit buku
     btnEdit.addEventListener('click', () => {
         updateData(bookObject.id);
 
     })
-    // action btn edit status
+    // action untuk tombol edit status buku
     btnEditStatus.addEventListener('click', () => {
         updateStatusData(bookObject.id, isComplete)
     })
-    // action btn delete
+    // action untuk tombol delete buku
     btnDelete.addEventListener('click', () => {
         deleteData(bookObject.id)
     })
 
-    // append action element
+    // menambahkan element dibawah element yang sudah ada
     actionContainer.classList.add('action')
     actionContainer.append(btnEditStatus, btnEdit, btnDelete)
 
-    // set value book object to element
+    // memasukkan value object ke element
     title.innerText = bookObject.title
     author.innerText = `Penulis : ${bookObject.author}`
     year.innerText = `Tahun : ${bookObject.year}`
 
-    // add all child to parent element
+    // menambahkan semua child ke parent
     article.setAttribute('id', `book-${bookObject.id}`)
     article.classList.add('book_item')
     article.append(title, author, year, actionContainer)
 
     return article
 }
+
+// membuat function edit buku
 function editData(){
     const {title, author, year, isComplete, inputBookId} = getElementInputForm()
     const data = {
@@ -178,7 +201,8 @@ function editData(){
     resetForm()
     document.dispatchEvent(new Event(RENDER_EVENT))
 }
-// save data book
+
+// membuat function simpan buku
 function saveData() {
     const {title, author, year, isComplete, inputBookId} = getElementInputForm()
     const data = {
@@ -187,27 +211,19 @@ function saveData() {
         year: year.value,
         isComplete: isComplete.checked,
     }
-
-    if (inputBookId.value) {
-        // find book by id
-        const findIndexBook = findBookIndex(inputBookId.value)
-        data.id = inputBookId.value
-        listBooks.splice(findIndexBook, 1, data)
-    } else {
-        const generatedId = generateId()
-        data.id = generatedId
-        listBooks.push(data)
-    }
+        
+    const generatedId = generateId()
+    data.id = generatedId
+    listBooks.push(data)
 
     saveDataToLocalStorage()
     resetForm()
     document.dispatchEvent(new Event(RENDER_EVENT))
 }
 
-// reset form input
+// membuat function reset form
 function resetForm() {
     const {title, author, year, isComplete, inputBookId} = getElementInputForm()
-
     inputBookId.value = ''
     title.value = ''
     author.value = ''
@@ -215,7 +231,7 @@ function resetForm() {
     isComplete.checked = false
 }
 
-// load data from local storage
+// mengload data dari local storage
 function loadDataFromLocalStorage() {
     try {
         if (checkStorageIsExists) {
@@ -236,7 +252,7 @@ function loadDataFromLocalStorage() {
     }
 }
 
-// save data to local storage
+// membuat function simpan data ke local storage
 function saveDataToLocalStorage() {
     if (checkStorageIsExists) {
         const parsedData = JSON.stringify(listBooks)
@@ -244,7 +260,8 @@ function saveDataToLocalStorage() {
     }
 }
 
-// update status book (complete/incomplete)
+// membuat function edit status buku
+
 function updateStatusData(id, status) {
     const findDataBook = findBook(id)
     
@@ -259,7 +276,8 @@ function updateStatusData(id, status) {
     }
 }
 
-// delete data book
+// membuat function delete buku
+
 function deleteData(id) {
     const detailBook = findBook(id)
     const confirmation = confirm(`Apakah kamu yakin akan menghapus buku dengan judul ${detailBook.title} ?`)
@@ -279,7 +297,7 @@ function deleteData(id) {
     }
 }
 
-
+// membuat function edit buku
 function updateData(id){
     const detailBook = findBook(id)
     const updated = document.getElementById("update");
@@ -292,25 +310,26 @@ function updateData(id){
     updated.style.display = "block";
     edited.style.display = "block";
 
-        const {title, author, year, isComplete, inputBookId} = getElementInputForm()
+    const {title, author, year, isComplete, inputBookId} = getElementInputForm()
+    
+    inputBookId.value = detailBook.id
+    title.value = detailBook.title
+    author.value = detailBook.author
+    year.value = detailBook.year
+    isComplete.checked = detailBook.isComplete
         
-        inputBookId.value = detailBook.id
-        title.value = detailBook.title
-        author.value = detailBook.author
-        year.value = detailBook.year
-        isComplete.checked = detailBook.isComplete
-        
-        updated.addEventListener("click", (event) => {
-            event.preventDefault()
-            updateSuccess()
-            editData()
-            inputed.style.display = "block";
-            book.style.display = "block";
-            updated.style.display = "none";
-            edited.style.display = "none";
-        })
-        
+    updated.addEventListener("click", (event) => {
+        event.preventDefault()
+        updateSuccess()
+        editData()
+        inputed.style.display = "block";
+        book.style.display = "block";
+        updated.style.display = "none";
+        edited.style.display = "none";
+    })    
 }
+
+// membuat function search buku
 const keyword = document.getElementById('searchBookTitle')
 const searchBook = document.getElementById('searchSubmit')
 searchBook.addEventListener('click', (event) => {
@@ -318,19 +337,18 @@ searchBook.addEventListener('click', (event) => {
     if (keyword.value) {
         listBooks = findBookByKeyword(keyword.value)
     }
-
     event.preventDefault()
     document.dispatchEvent(new Event(RENDER_EVENT))
 })
-// find book by keyword
+
+// membuat function edit buku dari keyword
 function findBookByKeyword(keyword) {
     let searchBooksResult = []
     for (const book of listBooks) {
         if (book.title.toLowerCase().includes(keyword.toLowerCase())) {
             searchBooksResult.push(book)
         }
-    }
-    
+    }  
     return searchBooksResult
 }
 
@@ -341,7 +359,6 @@ function findBook(id) {
             return book
         }
     }
-
     return null
 }
 
@@ -352,80 +369,39 @@ function findBookIndex(id) {
             return index
         }
     }
-
     return -1
 }
-
-function showDialog() {
-    var dialog = document.getElementById('customDialog');
-    var overlay = document.createElement('div');
-    overlay.classList.add('overlay');
-    
-    // Append overlay and display dialog
-    document.body.appendChild(overlay);
-    dialog.style.display = 'flex';
-}
-
-function closeDialog() {
-    var dialog = document.getElementById('customDialog');
-    var overlay = document.querySelector('.overlay');
-    
-    // Remove overlay and hide dialog
-    overlay.parentNode.removeChild(overlay);
-    dialog.style.display = 'none';
-}
-
-function toggle(){ 
-    var blur = document.getElementById('blur')
-    blur.classList.toggle('active');
-    var customDialog = document.getElementById('dialog')
-    customDialog.classList.toggle('active');
-}
-
+// membuat alert delete
 function deleteSuccess() {
-
     swal({
-
          title: "Berhasil!",
-
          text: "Data berhasil dihapus",
-
          icon: "success",
-
          button: true
-
      });
-
  }
 
+// membuat alert update
  function updateSuccess() {
-
     swal({
-
          title: "Berhasil!",
-
          text: "Data berhasil di Update",
-
          icon: "success",
-
          button: true
-
      });
-
  }
 
+ // membuat alert simpan
  function saveSuccess() {
-
     swal({
-
          title: "Berhasil!",
-
          text: "Data berhasil di simpan",
-
          icon: "success",
-
          button: true
-
      });
-
  }
+
+ // membuat alert delete
+ document.addEventListener('DOMContentLoaded', function () {
+    
+  });

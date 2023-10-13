@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Bookshelf Apps</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>Bookshelf</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
@@ -35,7 +34,10 @@
           </div>
           <div class="input">
             <label for="inputBookYear">Tahun</label>
-            <input id="inputBookYear" placeholder="Masukan tahun diterbitkan" type="number" pattern="\d*" maxlength="4" required >
+            <input id="inputBookYear" placeholder="Masukan tahun diterbitkan" type="text" pattern="\d*" minlength="3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" required >
+            <label id="notifikasiSisaKarakter">
+               <span id="sisaKarakter"></span>
+            </label>
           </div>
           <div class="input_inline">
             <input id="inputBookIsComplete" type="checkbox">
