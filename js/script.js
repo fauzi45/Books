@@ -1,7 +1,7 @@
 const RENDER_EVENT = 'render-ui'
 const STORAGE_KEY = 'bookshelf-apps'
 // membuat array books
-let listBooks = []
+let BooksofList = []
 
 // load content
 document.addEventListener('DOMContentLoaded', () => {
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let totalBookCompleted = 0
         let totalBookInCompleted = 0
 
-        for (const book of listBooks) {
+        for (const book of BooksofList) {
             const elementBooks = generateElementBooks(book)
 
             if (book.isComplete) {
@@ -195,7 +195,7 @@ function editData(){
         // find book by id
         const findIndexBook = findBookIndex(inputBookId.value)
         data.id = inputBookId.value
-        listBooks.splice(findIndexBook, 1, data)
+        BooksofList.splice(findIndexBook, 1, data)
     } 
     saveDataToLocalStorage()
     resetForm()
@@ -214,7 +214,7 @@ function saveData() {
         
     const generatedId = generateId()
     data.id = generatedId
-    listBooks.push(data)
+    BooksofList.push(data)
 
     saveDataToLocalStorage()
     resetForm()
@@ -235,14 +235,14 @@ function resetForm() {
 function loadDataFromLocalStorage() {
     try {
         if (checkStorageIsExists) {
-            listBooks = []
+            BooksofList = []
             const serializedData = localStorage.getItem(STORAGE_KEY)
 
             if (serializedData == null) return
 
             let dataParsed = JSON.parse(serializedData)
             for (const book of dataParsed) {
-                listBooks.push(book)
+                BooksofList.push(book)
             }
             
             document.dispatchEvent(new Event(RENDER_EVENT))
@@ -255,7 +255,7 @@ function loadDataFromLocalStorage() {
 // membuat function simpan data ke local storage
 function saveDataToLocalStorage() {
     if (checkStorageIsExists) {
-        const parsedData = JSON.stringify(listBooks)
+        const parsedData = JSON.stringify(BooksofList)
         localStorage.setItem(STORAGE_KEY, parsedData)
     }
 }
@@ -288,7 +288,7 @@ function deleteData(id) {
 
         if (findIndexBook === -1) return
 
-        listBooks.splice(findIndexBook, 1)
+        BooksofList.splice(findIndexBook, 1)
         const keyword = document.getElementById('searchBookTitle')
         keyword.value = ''
         deleteSuccess()
@@ -335,7 +335,7 @@ const searchBook = document.getElementById('searchSubmit')
 searchBook.addEventListener('click', (event) => {
     loadDataFromLocalStorage()
     if (keyword.value) {
-        listBooks = findBookByKeyword(keyword.value)
+        BooksofList = findBookByKeyword(keyword.value)
     }
     event.preventDefault()
     document.dispatchEvent(new Event(RENDER_EVENT))
@@ -344,7 +344,7 @@ searchBook.addEventListener('click', (event) => {
 // membuat function edit buku dari keyword
 function findBookByKeyword(keyword) {
     let searchBooksResult = []
-    for (const book of listBooks) {
+    for (const book of BooksofList) {
         if (book.title.toLowerCase().includes(keyword.toLowerCase())) {
             searchBooksResult.push(book)
         }
@@ -354,7 +354,7 @@ function findBookByKeyword(keyword) {
 
 // find book by id
 function findBook(id) {
-    for (const book of listBooks) {
+    for (const book of BooksofList) {
         if (id === book.id) {
             return book
         }
@@ -364,8 +364,8 @@ function findBook(id) {
 
 // find book index by id
 function findBookIndex(id) {
-    for (const index in listBooks) {
-        if (listBooks[index].id == id) {
+    for (const index in BooksofList) {
+        if (BooksofList[index].id == id) {
             return index
         }
     }
@@ -400,8 +400,3 @@ function deleteSuccess() {
          button: true
      });
  }
-
- // membuat alert delete
- document.addEventListener('DOMContentLoaded', function () {
-    
-  });
