@@ -187,7 +187,7 @@ function editData(){
     const data = {
         title: title.value,
         author: author.value,
-        year: year.value,
+        year: +year.value,
         isComplete: isComplete.checked,
     }
 
@@ -208,7 +208,7 @@ function saveData() {
     const data = {
         title: title.value,
         author: author.value,
-        year: year.value,
+        year: +year.value,
         isComplete: isComplete.checked,
     }
         
